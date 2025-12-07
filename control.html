@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Panel - Honor of Kings</title>
+</head>
+<style>
+    :root {
+        --primary: #1a73e8;
+        --primary-dark: #0d47a1;
+        --secondary: #ff5722;
+        --secondary-dark: #d84315;
+        --dark: #121212;
+        --darker: #0a0a0a;
+        --light: #f5f5f5;
+        --gray: #2d2d2d;
+        --gray-light: #424242;
+        --success: #4caf50;
+        --danger: #f44336;
+        --warning: #ff9800;
+        --border-radius: 8px;
+        --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        --transition: all 0.3s ease;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        padding: 20px;
+        background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+        color: var(--light);
+        min-height: 100vh;
+    }
+
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--secondary) 0%, var(--warning) 100%);
+    }
+
+    .title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+        background: linear-gradient(135deg, #fff 0%, #e0e0e0 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .subtitle {
+        font-size: 1rem;
+        opacity: 0.9;
+        font-weight: 300;
+    }
+
+    /* Section Toggle */
+    .section-toggle {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+        justify-content: center;
+    }
+
+    .toggle-btn {
+        padding: 12px 24px;
+        background: var(--gray);
+        border: 2px solid transparent;
+        border-radius: var(--border-radius);
+        color: white;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .toggle-btn:hover {
+        background: var(--gray-light);
+        transform: translateY(-2px);
+    }
+
+    .toggle-btn.active {
+        background: var(--primary);
+        border-color: var(--primary);
+        box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
+    }
+
+    /* Content Sections */
+    .content-section {
+        display: none;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .content-section.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Control Buttons */
+    .control-section {
+        background: var(--gray);
+        border-radius: var(--border-radius);
+        padding: 20px;
+        margin-bottom: 30px;
+        box-shadow: var(--box-shadow);
+    }
+
+    .section-title {
+        font-size: 1.4rem;
+        margin-bottom: 20px;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .section-title::before {
+        content: '';
+        width: 4px;
+        height: 24px;
+        background: var(--secondary);
+        border-radius: 2px;
+    }
+
+    .control-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 12px;
+    }
+
+    .control-btn {
+        padding: 14px 20px;
+        background: linear-gradient(135deg, var(--gray-light) 0%, var(--gray) 100%);
+        border: 2px solid transparent;
+        border-radius: var(--border-radius);
+        color: white;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 50px;
+    }
+
+    .control-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        border-color: var(--primary);
+    }
+
+    .control-btn:active {
+        transform: translateY(0);
+    }
+
+    .control-btn.reset {
+        background: linear-gradient(135deg, var(--danger) 0%, #d32f2f 100%);
+    }
+
+    .control-btn.switch {
+        background: linear-gradient(135deg, var(--warning) 0%, #f57c00 100%);
+    }
+
+    .control-btn.team {
+        background: linear-gradient(135deg, var(--success) 0%, #388e3c 100%);
+    }
+
+    .control-btn.timer {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    }
+
+    /* Nickname Cards */
+    .nickname-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+
+    .card {
+        background: var(--gray);
+        border-radius: var(--border-radius);
+        padding: 25px;
+        box-shadow: var(--box-shadow);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: var(--transition);
+    }
+
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid var(--primary);
+    }
+
+    .card-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: white;
+    }
+
+    .side-label {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .blue-side {
+        background: linear-gradient(135deg, #2196f3 0%, #0d47a1 100%);
+    }
+
+    .red-side {
+        background: linear-gradient(135deg, #f44336 0%, #b71c1c 100%);
+    }
+
+    /* Input Styles */
+    .input-group {
+        display: grid;
+        grid-template-columns: 40px 1fr;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .input-label {
+        width: 40px;
+        height: 40px;
+        background: var(--gray-light);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: white;
+        font-size: 0.9rem;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.07);
+        border: 2px solid transparent;
+        border-radius: var(--border-radius);
+        color: white;
+        font-size: 0.95rem;
+        transition: var(--transition);
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
+    }
+
+    .input-field::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Pick/Ban Section */
+    .pickban-section {
+        margin-bottom: 30px;
+    }
+
+    .pickban-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 25px;
+    }
+
+    .pick-section .pickban-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ban-section .pickban-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .pickban-card .card-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .pickban-icon {
+        font-size: 1.2rem;
+    }
+
+    .pickban-inputs {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    /* Dropdown Styles */
+    .dropdown-container {
+        position: relative;
+    }
+
+    .dropdown-input {
+        width: 100%;
+        padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.07);
+        border: 2px solid transparent;
+        border-radius: var(--border-radius);
+        color: white;
+        font-size: 0.95rem;
+        transition: var(--transition);
+    }
+
+    .dropdown-input:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
+    }
+
+    .dropdown-input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .dropdown-items {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--gray-light);
+        border-radius: var(--border-radius);
+        margin-top: 4px;
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 1000;
+        display: none;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .dropdown-item {
+        padding: 12px 16px;
+        color: white;
+        cursor: pointer;
+        transition: var(--transition);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .dropdown-item:last-child {
+        border-bottom: none;
+    }
+
+    .dropdown-item:hover {
+        background: var(--primary);
+    }
+
+    /* Team Info */
+    .team-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+
+    .team-input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .file-input {
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.07);
+        border: 2px dashed rgba(255, 255, 255, 0.2);
+        border-radius: var(--border-radius);
+        color: white;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .file-input:hover {
+        border-color: var(--primary);
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .file-input::file-selector-button {
+        padding: 8px 16px;
+        background: var(--primary);
+        border: none;
+        border-radius: 4px;
+        color: white;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .file-input::file-selector-button:hover {
+        background: var(--primary-dark);
+    }
+
+    /* Footer */
+    .footer {
+        text-align: center;
+        padding: 20px;
+        margin-top: 30px;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.9rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .container {
+            padding: 10px;
+        }
+        
+        .title {
+            font-size: 2rem;
+        }
+        
+        .section-toggle {
+            flex-direction: column;
+        }
+        
+        .toggle-btn {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .control-grid {
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        }
+        
+        .nickname-section,
+        .team-section,
+        .pickban-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .pick-section .pickban-grid,
+        .ban-section .pickban-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .card {
+            padding: 20px;
+        }
+        
+        .control-btn {
+            padding: 12px 16px;
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        body {
+            padding: 10px;
+        }
+        
+        .title {
+            font-size: 1.6rem;
+        }
+        
+        .control-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .input-group {
+            grid-template-columns: 35px 1fr;
+        }
+        
+        .input-label {
+            width: 35px;
+            height: 35px;
+            font-size: 0.8rem;
+        }
+    }
+
+
+    @media (max-width: 1024px) {
+        .pickban-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 640px) {
+        .section-toggle {
+            flex-direction: column;
+        }
+        
+        .toggle-btn {
+            width: 100%;
+            text-align: center;
+            justify-content: center;
+        }
+        
+        .pickban-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .control-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--primary);
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--primary-dark);
+    }
+</style>
+<body>
+
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1 class="title">CONTROL PANEL</h1>
+        <p class="subtitle">Honor of Kings - Tournament Draft System</p>
+    </div>
+
+    <!-- Section Toggle Buttons -->
+    <div class="section-toggle">
+        <button class="toggle-btn active" onclick="showSection('system-control')">
+            <span>⚙️</span> System Control
+        </button>
+        <button class="toggle-btn" onclick="showSection('nickname')">
+            <span>👤</span> Nickname
+        </button>
+        <button class="toggle-btn" onclick="showSection('pick')">
+            <span>⚔️</span> Pick Heroes
+        </button>
+        <button class="toggle-btn" onclick="showSection('ban')">
+            <span>🚫</span> Ban Heroes
+        </button>
+        <button class="toggle-btn" onclick="showSection('team')">
+            <span>🏆</span> Team Info
+        </button>
+        <button class="toggle-btn" onclick="showSection('timer')">
+            <span>⏱️</span> Timer
+        </button>
+    </div>
+
+    <!-- System Control Section -->
+    <div id="system-control" class="content-section active">
+        <div class="control-section">
+            <h2 class="section-title">System Control</h2>
+            <div class="control-grid">
+                <button class="control-btn reset" onclick="send('resetAllDropdowns')">
+                    <span>🗑️</span> Reset All Picks
+                </button>
+                <button class="control-btn reset" onclick="send('resetInputs')">
+                    <span>👤</span> Reset Nicknames
+                </button>
+                <button class="control-btn switch" onclick="send('switchInputs')">
+                    <span>🔄</span> Switch Nicknames
+                </button>
+                <button class="control-btn team" onclick="send('switchAll')">
+                    <span>🏆</span> Switch Teams
+                </button>
+                <button class="control-btn reset" onclick="send('resetContent')">
+                    <span>🔄</span> Reset All
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nickname Section -->
+    <div id="nickname" class="content-section">
+        <div class="nickname-section">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Blue Side Players</h3>
+                    <span class="side-label blue-side">BLUE</span>
+                </div>
+                <div class="input-group">
+                    <div class="input-label">1</div>
+                    <input type="text" class="input-field" id="input1" placeholder="Player 1" oninput="sendInput(1)">
+                </div>
+                <div class="input-group">
+                    <div class="input-label">2</div>
+                    <input type="text" class="input-field" id="input2" placeholder="Player 2" oninput="sendInput(2)">
+                </div>
+                <div class="input-group">
+                    <div class="input-label">3</div>
+                    <input type="text" class="input-field" id="input3" placeholder="Player 3" oninput="sendInput(3)">
+                </div>
+                <div class="input-group">
+                    <div class="input-label">4</div>
+                    <input type="text" class="input-field" id="input4" placeholder="Player 4" oninput="sendInput(4)">
+                </div>
+                <div class="input-group">
+                    <div class="input-label">5</div>
+                    <input type="text" class="input-field" id="input5" placeholder="Player 5" oninput="sendInput(5)">
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Red Side Players</h3>
+                    <span class="side-label red-side">RED</span>
+                </div>
+                <div class="input-group">
+                    <div class="input-label">1</div>
+                    <input type="text" class="input-field" id="input6" placeholder="Player 1" oninput="sendInput(6)">
+                </div>
+                <div class="input-group">
+                    <div class="input-label">2</div>
+                    <input type="text" class="input-field" id="input7" placeholder="Player 2" oninput="sendInput(7)">
+                </div>
+                <div class="input-group">
+                    <div class="input-label">3</div>
+                    <input type="text" class="input-field" id="input8" placeholder="Player 3" oninput="sendInput(8)">
+                </div>
+                <div class="input-group">
+                    <div class="input-label">4</div>
+                    <input type="text" class="input-field" id="input9" placeholder="Player 4" oninput="sendInput(9)">
+                </div>
+                <div class="input-group">
+                    <div class="input-label">5</div>
+                    <input type="text" class="input-field" id="input10" placeholder="Player 5" oninput="sendInput(10)">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pick Section -->
+    <div id="pick" class="content-section pick-section">
+        <div class="control-section">
+            <h2 class="section-title">Pick Heroes</h2>
+            <div class="pickban-grid">
+                <!-- Blue Pick -->
+                <div class="card pickban-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="pickban-icon">⚔️</span> Blue Side Picks
+                        </h3>
+                        <span class="side-label blue-side">PICKS</span>
+                    </div>
+                    <div class="pickban-inputs">
+                        <div class="dropdown-container">
+                            <input type="text" class="dropdown-input" id="search-1" placeholder="Blue Pick 1" oninput="filterDropdown(1)">
+                            <div class="dropdown-items" id="dropdown-items-1"></div>
+                        </div>
+                        <div class="dropdown-container">
+                            <input type="text" class="dropdown-input" id="search-2" placeholder="Blue Pick 2" oninput="filterDropdown(2)">
+                            <div class="dropdown-items" id="dropdown-items-2"></div>
+                        </div>
+                        <div class="dropdown-container">
+                            <input type="text" class="dropdown-input" id="search-3" placeholder="Blue Pick 3" oninput="filterDropdown(3)">
+                            <div class="dropdown-items" id="dropdown-items-3"></div>
+                        </div>
+                        <div class="dropdown-container">
+                            <input type="text" class="dropdown-input" id="search-4" placeholder="Blue Pick 4" oninput="filterDropdown(4)">
+                            <div class="dropdown-items" id="dropdown-items-4"></div>
+                        </div>
+                        <div class="dropdown-container">
+                            <input type="text" class="dropdown-input" id="search-5" placeholder="Blue Pick 5" oninput="filterDropdown(5)">
+                            <div class="dropdown-items" id="dropdown-items-5"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Red Pick -->
+                <div class="card pickban-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="pickban-icon">⚔️</span> Red Side Picks
+                        </h3>
+                        <span class="side-label red-side">PICKS</span>
+                    </div>
+                    <div class="pickban-inputs">
+                        <div class="dropdown-container">
+                            <input type="text" class="dropdown-input" id="search-10" placeholder="Red Pick 1" oninput="filterDropdown(10)">
+                            <div class="dropdown-items" id="dropdown-items-10"></div>
+                        </div>
+                        <div class="dropdown-container">
+                            <input type="text" class="dropdown-input" id="search-11" placeholder="Red Pick 2" oninput="filterDropdown(11)">
+                            <div class="dropdown-items" id="dropdown-items-11"></div>
+                        </div>
+                        <div class="dropdown-container">
+                            <input type="text" class="dropdown-input" id="search-12" placeholder="Red Pick 3" oninput="filterDropdown(12)">
+                            <div class="dropdown-items" id="dropdown-items-12"></div>
+                        </div>
+                        <div class="dropdown-container">
+                            <input type="text" class="dropdown-input" id="search-13" placeholder="Red Pick 4" oninput="filterDropdown(13)">
+                            <div class="dropdown-items" id="dropdown-items-13"></div>
+                        </div>
+                        <div class="dropdown-container">
+                            <input type="text" class="dropdown-input" id="search-14" placeholder="Red Pick 5" oninput="filterDropdown(14)">
+                            <div class="dropdown-items" id="dropdown-items-14"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ban Section -->
+    <div id="ban" class="content-section ban-section">
+        <div class="control-section">
+            <h2 class="section-title">Ban Heroes</h2>
+            <div class="pickban-grid">
+                <!-- Blue Ban -->
+                <div class="card pickban-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="pickban-icon">🚫</span> Blue Side Bans
+                        </h3>
+                        <span class="side-label blue-side">BANS</span>
+                    </div>
+                    <div class="pickban-inputs">
+                        <div class="dropdown-container">
+                            <input type="text" class="dropdown-input" id="search-6" placeholder="Blue Ban 1" oninput="filterDropdown(6)">
+                            <div class="dropdown-items" id="dropdown-items-6"></div>
+                        </div>
+                        <div class="dropdown-container">
+                            <input type="text" class="dropdown-input" id="search-7" placeholder="Blue Ban 2" oninput="filterDropdown(7)">
+                            <div class="dropdown-items" id="dropdown-items-7"></div>
+                        </div>
+                        <div class="dropdown-container">
+                            <input type="text" class="dropdown-input" id="search-8" placeholder="Blue Ban 3" oninput="filterDropdown(8)">
+                            <div class="dropdown-items" id="dropdown-items-8"></div>
+                        </div>
+                        <div class="dropdown-container">
+                            <input type="text" class="dropdown-input" id="search-9" placeholder="Blue Ban 4" oninput="filterDropdown(9)">
+                            <div class="dropdown-items" id="dropdown-items-9"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Red Ban -->
+                <div class="card pickban-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="pickban-icon">🚫</span> Red Side Bans
+                        </h3>
+                        <span class="side-label red-side">BANS</span>
+                    </div>
+                    <div class="pickban-inputs">
+                        <div class="dropdown-container">
+                            <input type="text" class="dropdown-input" id="search-15" placeholder="Red Ban 1" oninput="filterDropdown(15)">
+                            <div class="dropdown-items" id="dropdown-items-15"></div>
+                        </div>
+                        <div class="dropdown-container">
+                            <input type="text" class="dropdown-input" id="search-16" placeholder="Red Ban 2" oninput="filterDropdown(16)">
+                            <div class="dropdown-items" id="dropdown-items-16"></div>
+                        </div>
+                        <div class="dropdown-container">
+                            <input type="text" class="dropdown-input" id="search-17" placeholder="Red Ban 3" oninput="filterDropdown(17)">
+                            <div class="dropdown-items" id="dropdown-items-17"></div>
+                        </div>
+                        <div class="dropdown-container">
+                            <input type="text" class="dropdown-input" id="search-18" placeholder="Red Ban 4" oninput="filterDropdown(18)">
+                            <div class="dropdown-items" id="dropdown-items-18"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Info Section -->
+    <div id="team" class="content-section">
+        <div class="team-section">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Blue Team Info</h3>
+                    <span class="side-label blue-side">TEAM</span>
+                </div>
+                <div class="team-input-group">
+                    <input type="text" class="input-field" id="team1" placeholder="Team Name" oninput="sendTeam()">
+                    <input type="text" class="input-field" id="team3" placeholder="Score" oninput="sendTeam()">
+                    <input type="file" class="file-input" id="file1" accept="image/*" onchange="sendLogo(1)">
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Red Team Info</h3>
+                    <span class="side-label red-side">TEAM</span>
+                </div>
+                <div class="team-input-group">
+                    <input type="text" class="input-field" id="team2" placeholder="Team Name" oninput="sendTeam()">
+                    <input type="text" class="input-field" id="team4" placeholder="Score" oninput="sendTeam()">
+                    <input type="file" class="file-input" id="file2" accept="image/*" onchange="sendLogo(2)">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timer Section -->
+    <div id="timer" class="content-section">
+        <div class="control-section">
+            <h2 class="section-title">Timer Control</h2>
+            <div class="control-grid">
+                <button class="control-btn timer" onclick="send('startTimer')">
+                    <span>▶️</span> Start Timer
+                </button>
+                <button class="control-btn timer" onclick="send('stopTimer')">
+                    <span>⏸️</span> Stop Timer
+                </button>
+                <button class="control-btn timer" onclick="send('nextPhase')">
+                    <span>⏭️</span> Next Phase
+                </button>
+                <button class="control-btn timer" onclick="send('resetTimer')">
+                    <span>🔄</span> Reset Timer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>© 2024 Honor of Kings Tournament Control Panel | Version 2.0</p>
+        <p>Connected to Display: <span id="connection-status">🟢 Online</span></p>
+    </div>
+</div>
+
+<script src="JS/control.js"></script>
+</body>
+</html>

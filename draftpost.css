@@ -1,0 +1,278 @@
+@font-face {
+    font-family: 'big_noodle_titling';
+    src: url('Assets/Font/big_noodle_titling.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Menggunakan font di seluruh halaman */
+body {
+    font-family: 'big_noodle_titling', sans-serif;
+    background-color: #00ff62;
+}
+
+.mainbox{
+    width: 1920px;
+    height: 1080px;
+    background-image: url(full1.png);
+    background-size: 100%;
+}
+.upper{
+    width: 1920px;
+    height: 239px;
+    display: flex;
+}
+
+.logoteam{
+    width: 239px;
+    height: 239px;
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url(teamframe.png);
+    background-size: 100%;
+    scale: 0.7;
+}
+
+.logoteam img{
+    width: 239px;
+    height: 150px;
+    object-fit: contain;
+    opacity: 1;
+
+}
+
+.teamnameblue{
+    width: 520px;
+    height: 239px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    font-size: 100px;
+    color: #ffffff;
+    margin-top: 100px;
+    margin-right: 20px;
+    margin-top: 25px;
+}
+
+.teamnamered{
+    width: 520px;
+    height: 239px;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    font-size: 100px;
+    color: #ffffff;
+    margin-top: 100px;
+    margin-left: 20px;
+    margin-top: 25px;
+}
+
+.middle{
+    width: 1920px;
+    height: 582px;
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pick{
+    width: 176px;
+    height: 543px;
+    position: relative;
+    margin: -2px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* NICKNAME YANG DIUBAH - dipindah ke bawah dengan area khusus */
+.bluenick{
+    width: 100%;
+    height: 60px; /* Area khusus untuk nickname */
+    font-size: 24px;
+    color: aliceblue;
+    text-shadow: 2px 3px 5px #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0, 0, 0);
+    padding: 5px 0;
+    z-index: 2;
+    order: 2; /* Pastikan di bawah */
+}
+
+.rednick{
+    width: 100%;
+    height: 60px; /* Area khusus untuk nickname */
+    font-size: 24px;
+    color: aliceblue;
+    text-shadow: 2px 3px 5px #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0, 0, 0);
+    padding: 5px 0;
+    z-index: 2;
+    order: 2; /* Pastikan di bawah */
+}
+
+/* FOTO HERO YANG DIPERBAIKI - PAS DI KOTAK */
+.image-box{
+    width: 100%;
+    height: calc(100% - 60px); /* Tinggi total dikurangi tinggi nickname */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Rata atas agar kepala hero tidak terpotong */
+    overflow: hidden;
+    position: relative;
+    order: 1; /* Pastikan di atas */
+    background-color: rgba(0, 0, 0, 0.3); /* Background gelap untuk area kosong */
+}
+
+/* Gambar hero yang PAS DI KOTAK */
+.image-box img {
+    width: auto;
+    height: 100%;
+    max-width: 120%; /* Sedikit lebih lebar untuk memastikan penuh */
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    object-fit: cover; /* Gambar memenuhi area tanpa distorsi */
+    object-position: center top; /* Fokus ke bagian atas hero */
+}
+
+/* Gradient overlay untuk bayangan di bawah gambar */
+.image-box::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.9) 100%);
+    z-index: 2;
+}
+
+/* PICKMID - STYLE UNTUK VS */
+.pickmid{
+    width: 140px;
+    height: 582px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 80px;
+    color: #ffffff;
+    font-weight: bold;
+    letter-spacing: 5px;
+    -webkit-background-clip: text;
+    background-clip: text;
+    position: relative;
+}
+
+
+.lower {
+    width: 1900px;
+    height: 239px;
+}
+
+.nul{
+    width: 20px;
+}
+
+.playerholder{
+    width: 1920px;
+    height: 543px;
+    opacity: 0;
+    display: flex;
+}
+
+.playerimagebox{
+    width: 176px;
+    height: 243px;
+    margin: -2px;
+    border-radius: 15px;
+    overflow: hidden;
+    display: flex;
+    align-items: top;
+    justify-content: center;
+    margin-top: -480px;
+    border-bottom: 4px solid #000000;
+    border-left: 4px solid #000000;
+    border-right: 4px solid #000000;
+}
+
+.playerimagebox img{
+    display: flex;
+    width: 350px;
+    position: relative;
+    z-index: 2;
+    scale: 1;
+}
+
+.scoreinfo{
+    width:100px;
+    height: 239px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px;
+    font-size: 50px;
+    background-image: url(teamframe.png);
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #ffffff;
+}
+
+.midscore{
+    width: 250px;
+}
+
+.midscore img{
+    width: 250px;
+    scale: 0.6;
+    margin-top: 140px;
+}
+
+.name-image-box{
+    position: absolute;
+    z-index: 2;
+}
+
+.name-image-box img{
+    scale: 0.4;
+    margin-top: 400px;
+}
+
+/* GANTI MENJADI BOX SHADOW */
+.name-box.updated {
+    animation: boxShadowGlow 1s ease-in-out;
+}
+
+@keyframes boxShadowGlow {
+    0% { 
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5),
+                   0 0 20px rgba(255, 255, 255, 0.3);
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.8),
+                   0 0 40px rgba(0, 255, 0, 0.6),
+                   0 0 60px rgba(0, 255, 0, 0.4);
+    }
+    100% { 
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    }
+}
+
+/* Styling untuk pick yang aktif */
+.pick.active {
+    border-color: #00ff00;
+    box-shadow: inset 0 0 20px rgba(0, 255, 0, 0.3);
+}
